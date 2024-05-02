@@ -1,15 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Backend.Database.Models;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
 
 public class DatabaseContext : DbContext
 {
+    public DbSet<Event> Events {  get; set; } 
+
     private IConfiguration _config { get; init; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration config) : base(options)
     {
         _config = config;
-        Database.EnsureCreated();
+        Database.EnsureCreated(); 
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

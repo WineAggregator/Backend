@@ -1,4 +1,8 @@
-﻿namespace Backend.Utils;
+﻿using Backend.Database;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace Backend.Utils;
 
 public static class DependencyInjectionConfiguring
 {
@@ -16,5 +20,7 @@ public static class DependencyInjectionConfiguring
         _services.AddControllers();
         _services.AddEndpointsApiExplorer();
         _services.AddSwaggerGen();
+
+        _services.AddDbContext<DatabaseContext>(options => options.UseNpgsql());
     }
 }
