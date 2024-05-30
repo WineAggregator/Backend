@@ -3,6 +3,7 @@ using System;
 using Backend.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,16 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240530130334_RemoveOrganizersAndChangingEvent")]
+    partial class RemoveOrganizersAndChangingEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -58,7 +58,7 @@ namespace Backend.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PreviewPhotoId")
+                    b.Property<int?>("PreviewPhotoIdId")
                         .HasColumnType("integer");
 
                     b.Property<double>("Price")
@@ -70,7 +70,7 @@ namespace Backend.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PreviewPhotoId");
+                    b.HasIndex("PreviewPhotoIdId");
 
                     b.ToTable("Events");
                 });
@@ -83,10 +83,10 @@ namespace Backend.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("EventId")
+                    b.Property<int>("EventId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("PhotoId")
+                    b.Property<int>("PhotoId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -141,22 +141,26 @@ namespace Backend.Database.Migrations
 
             modelBuilder.Entity("Backend.Database.Models.Event", b =>
                 {
-                    b.HasOne("Backend.Database.Models.Photo", "PreviewPhoto")
+                    b.HasOne("Backend.Database.Models.Photo", "PreviewPhotoId")
                         .WithMany()
-                        .HasForeignKey("PreviewPhotoId");
+                        .HasForeignKey("PreviewPhotoIdId");
 
-                    b.Navigation("PreviewPhoto");
+                    b.Navigation("PreviewPhotoId");
                 });
 
             modelBuilder.Entity("Backend.Database.Models.EventPhoto", b =>
                 {
                     b.HasOne("Backend.Database.Models.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Backend.Database.Models.Photo", "Photo")
                         .WithMany()
-                        .HasForeignKey("PhotoId");
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Event");
 

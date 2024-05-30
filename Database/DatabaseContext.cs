@@ -10,8 +10,6 @@ public class DatabaseContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Event> Events {  get; set; } 
     public DbSet<EventPhoto> EventsPhoto { get; set; }
-    public DbSet<Organizer> Organizers { get; set; }
-    
 
     private IConfiguration _config { get; init; }
 
