@@ -1,4 +1,4 @@
-﻿using Backend.Database.Models;
+﻿using Backend.Database.Enums;
 
 namespace Backend.Api.Dto;
 
@@ -34,4 +34,9 @@ public class GetEventDto
     public required string OrganizerName { get; set; }
 
     public required string PreviewPhotoLink { get; set; }
+}
+
+public class GetAllEventsDto
+{
+    public List<GetEventDto> Events { get; set; }
 }

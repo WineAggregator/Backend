@@ -1,4 +1,6 @@
-﻿namespace Backend.Database.Models;
+﻿using Backend.Database.Enums;
+
+namespace Backend.Database.Models;
 
 public class Event : BaseModel
 {

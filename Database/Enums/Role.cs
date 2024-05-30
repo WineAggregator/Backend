@@ -1,4 +1,4 @@
-﻿namespace Backend.Database.Models;
+﻿namespace Backend.Database.Enums;
 
 public enum Role
 {

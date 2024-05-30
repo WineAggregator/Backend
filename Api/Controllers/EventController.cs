@@ -11,10 +11,10 @@ namespace Backend.Api.Controllers;
 public class EventController(EventRepository _eventRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<List<GetEventDto>> GetAllEvents()
+    public async Task<GetAllEventsDto> GetAllEvents()
     {
         var events = await _eventRepository.GetAllEntitiesAsync() ?? [];
-        return events.Select(MapEventToGetDto).ToList();
+        return new GetAllEventsDto { Events = events.Select(MapEventToGetDto).ToList() };
     }
 
     [HttpPost]
