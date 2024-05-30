@@ -17,5 +17,5 @@ public class Event : BaseModel
     public DateTime DateFrom { get; set; } = DateTime.MinValue;
     public DateTime DateTo { get; set; } = DateTime.MaxValue;
 
-    public virtual Photo? PreviewPhoto { get; set; }
+    public required string PreviewPhotoLink { get; set; }
 }

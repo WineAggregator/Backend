@@ -1,4 +1,5 @@
-﻿using Backend.Database;
+﻿using Backend.Api.Services;
+using Backend.Database;
 using Backend.Database.Repositories;
 
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ public static class DependencyInjectionConfiguring
 
         RegisterAspServices();
         RegisterRepositories();
+        RegisterMyServices();
     }
 
     private static void RegisterAspServices()
@@ -24,10 +26,18 @@ public static class DependencyInjectionConfiguring
         _services.AddSwaggerGen();
 
         _services.AddDbContext<DatabaseContext>(options => options.UseNpgsql().UseLazyLoadingProxies());
+
+        _services.AddHttpContextAccessor();
     }
 
     private static void RegisterRepositories()
     {
         _services.AddScoped<EventRepository>();
+        _services.AddScoped<PhotoRepository>();
+    }
+
+    private static void RegisterMyServices()
+    {
+        _services.AddScoped<PhotoManager>();
     }
 }

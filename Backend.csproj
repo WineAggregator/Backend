@@ -26,8 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Api\Services\" />
-    <Folder Include="Api\Repositories\" />
     <Folder Include="Database\Migrations\" />
   </ItemGroup>
 
