@@ -25,6 +25,7 @@
     <Folder Include="Api\Repositories\" />
     <Folder Include="Api\Dto\" />
     <Folder Include="Database\Migrations\" />
+    <Folder Include="Database\Repositories\" />
   </ItemGroup>
 
 </Project>

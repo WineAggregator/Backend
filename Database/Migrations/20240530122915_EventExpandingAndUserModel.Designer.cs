@@ -3,6 +3,7 @@ using System;
 using Backend.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240530122915_EventExpandingAndUserModel")]
+    partial class EventExpandingAndUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,29 +76,6 @@ namespace Backend.Database.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("Backend.Database.Models.EventPhoto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PhotoId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("PhotoId");
-
-                    b.ToTable("EventsPhoto");
-                });
-
             modelBuilder.Entity("Backend.Database.Models.Organizer", b =>
                 {
                     b.Property<int>("Id")
@@ -111,7 +91,7 @@ namespace Backend.Database.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Organizers");
+                    b.ToTable("Organizer");
                 });
 
             modelBuilder.Entity("Backend.Database.Models.Photo", b =>
@@ -128,7 +108,7 @@ namespace Backend.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photo");
                 });
 
             modelBuilder.Entity("Backend.Database.Models.User", b =>
@@ -152,7 +132,7 @@ namespace Backend.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Backend.Database.Models.Event", b =>
@@ -170,25 +150,6 @@ namespace Backend.Database.Migrations
                     b.Navigation("Organizer");
 
                     b.Navigation("PreviewPhotoId");
-                });
-
-            modelBuilder.Entity("Backend.Database.Models.EventPhoto", b =>
-                {
-                    b.HasOne("Backend.Database.Models.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Database.Models.Photo", "Photo")
-                        .WithMany()
-                        .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Photo");
                 });
 
             modelBuilder.Entity("Backend.Database.Models.Organizer", b =>

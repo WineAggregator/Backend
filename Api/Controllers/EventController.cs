@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.Api.Controllers
 {
     [ApiController]
-    [Route("/events")]
+    [Route("api/v1/events")]
     public class EventController : ControllerBase
     {
         [HttpGet]
