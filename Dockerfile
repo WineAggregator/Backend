@@ -22,4 +22,10 @@ RUN dotnet publish "./Backend.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+USER root
+RUN mkdir static_files
+RUN mkdir static_files/photos
+RUN chmod 777 /app/static_files/photos
+
 ENTRYPOINT ["dotnet", "Backend.dll"]
