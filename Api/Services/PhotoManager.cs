@@ -1,10 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Xml.Linq;
-
-using Backend.Api.Dto;
-using Backend.Database.Enums;
-using Backend.Database.Models;
+﻿using Backend.Database.Models;
 using Backend.Database.Repositories;
 
 namespace Backend.Api.Services;

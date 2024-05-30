@@ -20,6 +20,14 @@ public class EventController(
         return new GetAllEventsDto { Events = events.Select(MapEventToGetDto).ToList() };
     }
 
+    [HttpGet]
+    [Route("{eventId}")]
+    public async Task<GetEventDto> GetAllEvents([FromRoute] int eventId)
+    {
+        var eventObject = await _eventRepository.GetEntityByIdAsync(eventId);
+        return MapEventToGetDto(eventObject);
+    }
+
     [HttpPost]
     public async Task<int> CreateEvent([FromBody] CreateEventDto dto)
     {
