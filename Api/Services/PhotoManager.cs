@@ -24,9 +24,11 @@ public class PhotoManager(
     public async Task<string> UploadPhoto(IFormFile file)
     {
         var filePath = GeneratePath(file.FileName);
-        
-        using var fileStream = new FileStream(path: filePath, mode: FileMode.CreateNew);
-        await file.CopyToAsync(fileStream);
+
+        using (var fileStream = new FileStream(path: filePath, mode: FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
 
         var photoObjectToCreate = new Photo { PhotoPath = filePath };
         var photoId = await _photoRepository.CreateEntityAsync(photoObjectToCreate);
@@ -54,12 +56,7 @@ public class PhotoManager(
 
     private static async Task<byte[]> GetPhotoBytes(string photoPath)
     {
-        using var fileStream = new FileStream(path: photoPath, mode: FileMode.Open);
-        var bytesAmount = fileStream.Length;
-        var photoBytes = new byte[bytesAmount];
-        await fileStream.ReadAsync(photoBytes);
-
-        return photoBytes;
+        return await File.ReadAllBytesAsync(photoPath);
     }
 
     private static string GetRandomGuid()
