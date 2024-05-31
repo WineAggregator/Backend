@@ -2,3 +2,4 @@
 /bin
 /obj
 /.vs
+/Configs/appsettings.json
