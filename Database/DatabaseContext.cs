@@ -16,6 +16,8 @@ public class DatabaseContext : DbContext
     public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration config) : base(options)
     {
         _config = config;
+
+        Database.Migrate();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
