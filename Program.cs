@@ -19,4 +19,9 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 app.RegisterAllMiddlewares();
 
-app.Run();
+app.UseCors(builder => builder
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod());
+
+await app.RunAsync();
