@@ -10,6 +10,7 @@ public class Event : BaseModel
     public double Price { get; set; }
     public string Link { get; set; } = string.Empty;
 
+    public required virtual User Organizer { get; set; }
     public string OrganizerName { get; set; } = string.Empty;
 
     public EventType EventType { get; set; } = 0;

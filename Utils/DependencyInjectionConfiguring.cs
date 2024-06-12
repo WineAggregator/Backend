@@ -24,14 +24,15 @@ public static class DependencyInjectionConfiguring
     private static void RegisterAspServices()
     {
         _services.AddControllers(options => options.ModelBinderProviders.Insert(0, new AuthorizationHeaderModelBinderProvider()));
-        //_services.AddControllers();
         _services.AddEndpointsApiExplorer();
 
         _services.AddHttpContextAccessor();
 
         _services.AddSwaggerGen(c => c.OperationFilter<SwaggerAuthorizationHeaderFilter>());
         _services.AddDbContext<DatabaseContext>(options => options.UseNpgsql().UseLazyLoadingProxies());
-        
+
+        _services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
     }
 
     private static void RegisterRepositories()
@@ -39,6 +40,7 @@ public static class DependencyInjectionConfiguring
         _services.AddScoped<EventRepository>();
         _services.AddScoped<PhotoRepository>();
         _services.AddScoped<UserRepository>();
+        _services.AddScoped<TicketRepository>();
     }
 
     private static void RegisterMyServices()

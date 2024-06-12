@@ -10,6 +10,7 @@ namespace Backend.Api.Controllers;
 [ApiController]
 [Route("api/v1/events")]
 public class EventController(
+    UserRepository _userRepository,
     EventRepository _eventRepository,
     PhotoManager _photoManager) : ControllerBase
 {
@@ -29,9 +30,16 @@ public class EventController(
     }
 
     [HttpPost]
-    public async Task<int> CreateEvent([FromBody] CreateEventDto dto)
+    public async Task<int> CreateEvent([FromHeader] UserAuthInfo authInfo, [FromBody] CreateEventDto dto)
     {
-        var eventObject = MapCreateDtoToModel(dto);
+        var user = await _userRepository.GetEntityByIdAsync(authInfo.Id);
+        if (user is null)
+            throw new BadHttpRequestException("Ќет пользовател€ с таким id", 401);
+
+        if (user.Role != Database.Enums.Role.Manager)
+            throw new BadHttpRequestException("¬ы не можете создавать свои мероприти€, так как €вл€етесь пользователем", 403);
+
+        var eventObject = MapCreateDtoToModel(dto, user);
         var id = await _eventRepository.CreateEntityAsync(eventObject);
 
         return id;
@@ -64,7 +72,7 @@ public class EventController(
         };
     }
 
-    private Event MapCreateDtoToModel(CreateEventDto dto)
+    private Event MapCreateDtoToModel(CreateEventDto dto, User user)
     {
         return new Event()
         {
@@ -73,7 +81,8 @@ public class EventController(
             DateTo = dto.DateTo,
             Description = dto.Description,
             Address = dto.Address,
-            Link = dto.Link,
+            Link = dto.Link ?? "",
+            Organizer = user,
             OrganizerName = dto.OrganizerName,
             Price = dto.Price,
             Title = dto.Title,
