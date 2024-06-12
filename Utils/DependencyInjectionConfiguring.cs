@@ -1,4 +1,6 @@
 ﻿using Backend.Api.Services;
+using Backend.Api.Services.Filters;
+using Backend.Api.Services.ModelBinders;
 using Backend.Database;
 using Backend.Database.Repositories;
 
@@ -21,13 +23,15 @@ public static class DependencyInjectionConfiguring
 
     private static void RegisterAspServices()
     {
-        _services.AddControllers();
+        _services.AddControllers(options => options.ModelBinderProviders.Insert(0, new AuthorizationHeaderModelBinderProvider()));
+        //_services.AddControllers();
         _services.AddEndpointsApiExplorer();
-        _services.AddSwaggerGen();
-
-        _services.AddDbContext<DatabaseContext>(options => options.UseNpgsql().UseLazyLoadingProxies());
 
         _services.AddHttpContextAccessor();
+
+        _services.AddSwaggerGen(c => c.OperationFilter<SwaggerAuthorizationHeaderFilter>());
+        _services.AddDbContext<DatabaseContext>(options => options.UseNpgsql().UseLazyLoadingProxies());
+        
     }
 
     private static void RegisterRepositories()

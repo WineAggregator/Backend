@@ -12,7 +12,7 @@ namespace Backend.Api.Controllers
     {
         [HttpPost]
         [Route("register")]
-        public async Task<IResult> Register(UserRegistrationDto registrationDto)
+        public async Task<IResult> Register([FromBody] UserRegistrationDto registrationDto)
         {
             var userByEmail = _userRepository.GetUserByEmail(registrationDto.Email);
             if (userByEmail is not null)
@@ -32,9 +32,9 @@ namespace Backend.Api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IResult> Login(UserLoginDto loginDto)
+        public async Task<IResult> Login([FromBody] UserLoginDto loginDto)
         {
-            var userByEmail = _userRepository.GetUserByEmail(loginDto.Email);
+            var userByEmail = await _userRepository.GetUserByEmail(loginDto.Email);
             if (userByEmail == null)
                 return Results.Unauthorized();
 

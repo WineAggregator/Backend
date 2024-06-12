@@ -1,4 +1,4 @@
-﻿using System.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 
 using Backend.Database.Models;
 
@@ -6,9 +6,9 @@ namespace Backend.Database.Repositories;
 
 public class UserRepository(DatabaseContext database) : BaseRepository<User>(database)
 {
-    public User? GetUserByEmail(string email)
+    public async Task<User?> GetUserByEmail(string email)
     {
-        var user = table.Where( user => user.Email == email).FirstOrDefault();
+        var user = await table.FirstOrDefaultAsync(user => user.Email == email);
         return user;
     }
 }

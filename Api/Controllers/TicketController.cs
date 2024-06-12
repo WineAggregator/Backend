@@ -9,7 +9,7 @@ namespace Backend.Api.Controllers;
 public class TicketController
 {
     [HttpGet]
-    public async Task GetAllUserTickets()
+    public async Task GetAllUserTickets([FromHeader] UserAuthInfo authInfo)
     {
 
     }
