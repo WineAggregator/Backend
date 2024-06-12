@@ -14,7 +14,7 @@ namespace Backend.Api.Controllers
         [Route("register")]
         public async Task<IResult> Register([FromBody] UserRegistrationDto registrationDto)
         {
-            var userByEmail = _userRepository.GetUserByEmail(registrationDto.Email);
+            var userByEmail = await _userRepository.GetUserByEmail(registrationDto.Email);
             if (userByEmail is not null)
                 return Results.Unauthorized();
 
