@@ -45,14 +45,36 @@ public class EventController(
         return id;
     }
 
+    [HttpPatch]
+    [Route("{eventId}")]
+    public async Task UpdateEvent([FromRoute] int eventId, [FromBody] UpdateEventDto updateEventDto)
+    {
+        await _eventRepository.UpdateEntityAsync(eventId, updateEventDto);
+    }
+
     [HttpPost]
     [Route("{eventId}/preview")]
-    public async Task<UrlToGetFileDto> SetPreview([FromRoute] int eventId, [FromForm] UploadPhotoDto photoDto)
+    public async Task<UrlToGetPhotoDto> SetPreview([FromRoute] int eventId, [FromForm] UploadPhotoDto photoDto)
     {
-        var photoUrl = await _photoManager.UploadPhoto(photoDto.Photo);
+        var photoUrl = await _photoManager.UploadPhotoAndGetUrl(photoDto.Photo);
         await _eventRepository.SetPreview(eventId, photoUrl);
 
-        return new UrlToGetFileDto { Url = photoUrl };
+        return new UrlToGetPhotoDto { Url = photoUrl };
+    }
+
+    [HttpPost]
+    [Route("{eventId}/gallery")]
+    public async Task<GetUrlsForMultiplePhotos> UploadGallery([FromRoute] int eventId, [FromForm] UploadMultiplePhotosDto photoDto)
+    {
+        var urls = new List<UrlToGetPhotoDto>();
+
+        foreach (var photo in photoDto.Photos)
+        {
+            var photoUrl = await _photoManager.UploadPhotoAndGetUrl(photo);
+            urls.Add(new UrlToGetPhotoDto { Url = photoUrl });
+        }
+
+        return new GetUrlsForMultiplePhotos { Urls = urls };
     }
 
     private GetEventDto MapEventToGetDto(Event eventObject)

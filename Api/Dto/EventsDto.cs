@@ -1,4 +1,5 @@
 ﻿using Backend.Database.Enums;
+using Backend.Database.Models;
 
 namespace Backend.Api.Dto;
 
@@ -38,5 +39,50 @@ public class GetEventDto
 
 public class GetAllEventsDto
 {
-    public List<GetEventDto> Events { get; init; }
+    public required List<GetEventDto> Events { get; init; } = [];
+}
+
+public class UpdateEventDto : BaseUpdateDto<Event>
+{
+    public string? Title { get; init; }
+    public string? Description { get; init; }
+    public string? Address { get; init; }
+    public double? Price { get; init; }
+    public string? Link { get; init; }
+    public EventType? EventType { get; init; }
+    public DateTime? DateFrom { get; init; }
+    public DateTime? DateTo { get; init; }
+    public string? OrganizerName { get; init; }
+
+    public override Event UpdateEntity(Event entityToUpdate)
+    {
+        if (Title is not null)
+            entityToUpdate.Title = Title;
+
+        if (Description is not null)
+            entityToUpdate.Description = Description;
+
+        if (Address is not null)
+            entityToUpdate.Address = Address;
+
+        if (Price is not null)
+            entityToUpdate.Price = Price.Value;
+
+        if (Link is not null)
+            entityToUpdate.Link = Link;
+
+        if (EventType is not null)
+            entityToUpdate.EventType = EventType.Value;
+
+        if (DateFrom is not null)
+            entityToUpdate.DateFrom = DateFrom.Value;
+
+        if (DateTo is not null)
+            entityToUpdate.DateTo = DateTo.Value;
+
+        if (OrganizerName is not null)
+            entityToUpdate.OrganizerName = OrganizerName;
+
+        return entityToUpdate;
+    }
 }

@@ -15,7 +15,7 @@ public class PhotoManager(
     }
 
     // Должна возвращать ссылку на закачку фото
-    public async Task<string> UploadPhoto(IFormFile file)
+    public async Task<string> UploadPhotoAndGetUrl(IFormFile file)
     {
         var filePath = GeneratePath(file.FileName);
 
@@ -30,6 +30,21 @@ public class PhotoManager(
         var photoUrl = GetUrlToPhoto(photoId);
 
         return photoUrl;
+    }
+
+    public async Task<int> UploadPhotoAndGetId(IFormFile file)
+    {
+        var filePath = GeneratePath(file.FileName);
+
+        using (var fileStream = new FileStream(path: filePath, mode: FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+
+        var photoObjectToCreate = new Photo { PhotoPath = filePath };
+        var photoId = await _photoRepository.CreateEntityAsync(photoObjectToCreate);
+
+        return photoId;
     }
 
     public async Task<byte[]> GetStandardPhoto()

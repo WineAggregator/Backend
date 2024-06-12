@@ -19,4 +19,13 @@ public class PhotoController(PhotoRepository _photoRepository, PhotoManager _pho
 
         return Results.File(fileContents: photoBytes, contentType: "image/png");
     }
+
+    [HttpPost]
+    [Route("upload")]
+    public async Task<BaseIdDto> UploadPhoto([FromForm] UploadPhotoDto photoDto)
+    {
+        var photoId = await _photoManager.UploadPhotoAndGetId(photoDto.Photo);
+
+        return new BaseIdDto { Id = photoId };
+    }
 }
