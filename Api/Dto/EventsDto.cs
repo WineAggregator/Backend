@@ -4,39 +4,39 @@ namespace Backend.Api.Dto;
 
 public class CreateEventDto
 {
-    public required string Title { get; set; }
-    public required string Description { get; set; }
-    public required string Address { get; set; }
-    public required double Price { get; set; }
-    public string? Link { get; set; }
+    public required string Title { get; init; }
+    public required string Description { get; init; }
+    public required string Address { get; init; }
+    public required double Price { get; init; }
+    public string? Link { get; init; }
 
-    public required EventType EventType { get; set; }
-    public required DateTime DateFrom { get; set; }
-    public required DateTime DateTo { get; set; }
+    public required EventType EventType { get; init; }
+    public required DateTime DateFrom { get; init; }
+    public required DateTime DateTo { get; init; }
 
-    public required string OrganizerName { get; set; }
+    public required string OrganizerName { get; init; }
 }
 
 public class GetEventDto
 {
-    public required int Id { get; set; }
+    public required int Id { get; init; }
 
-    public required string Title { get; set; }
-    public required string Description { get; set; }
-    public required string Address { get; set; }
-    public required double Price { get; set; }
-    public string? Link { get; set; }
+    public required string Title { get; init; }
+    public required string Description { get; init; }
+    public required string Address { get; init; }
+    public required double Price { get; init; }
+    public string? Link { get; init; }
 
-    public required EventType EventType { get; set; }
-    public required DateTime DateFrom { get; set; }
-    public required DateTime DateTo { get; set; }
+    public required EventType EventType { get; init; }
+    public required DateTime DateFrom { get; init; }
+    public required DateTime DateTo { get; init; }
 
-    public required string OrganizerName { get; set; }
+    public required string OrganizerName { get; init; }
 
-    public required string PreviewPhotoLink { get; set; }
+    public required string PreviewPhotoLink { get; init; }
 }
 
 public class GetAllEventsDto
 {
-    public List<GetEventDto> Events { get; set; }
+    public List<GetEventDto> Events { get; init; }
 }

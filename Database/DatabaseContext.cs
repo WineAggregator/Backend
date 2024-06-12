@@ -11,6 +11,11 @@ public class DatabaseContext : DbContext
     public DbSet<Event> Events {  get; set; } 
     public DbSet<EventPhoto> EventsPhoto { get; set; }
 
+    public DbSet<Feedback> Feedbacks { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
+
     private IConfiguration _config { get; init; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration config) : base(options)

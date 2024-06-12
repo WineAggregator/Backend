@@ -26,8 +26,8 @@ public class UserLoginDto : BaseDto
 public class UserAuthInfo
 {
     [FromHeader]
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     [FromHeader]
-    public Role UserType { get; set; }
+    public Role UserType { get; init; }
 }
