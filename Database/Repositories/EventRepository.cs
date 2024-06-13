@@ -13,4 +13,9 @@ public class EventRepository(DatabaseContext database) : BaseRepository<Event>(d
         eventObject.PreviewPhotoLink = link;
         await _database.SaveChangesAsync();
     }
+
+    public async Task<List<Event>> GetOrganizerEvents(int organizerUserId)
+    {
+        return await table.Where(e => e.Organizer.Id == organizerUserId).ToListAsync();
+    }
 }

@@ -4,6 +4,7 @@ using Backend.Database.Models;
 using Backend.Database.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Api.Controllers;
 
@@ -96,6 +97,21 @@ public class EventController(
     public async Task DeletePhotoFromGallery([FromRoute] int eventId, [FromRoute] int photoId)
     {
         await _eventPhotoRepository.DeletePhotoFromGallery(eventId: eventId, photoId: photoId);
+    }
+
+    [HttpGet]
+    [Route("organizer")]
+    public async Task<GetAllEventsDto> GetAllOrganizerEvents([FromHeader] UserAuthInfo authInfo)
+    {
+        var user = await _userRepository.GetEntityByIdAsync(authInfo.Id);
+        if (user is null)
+            throw new BadHttpRequestException("Нет пользователя с таким id", 401);
+        if (user.Role != Database.Enums.Role.Manager)
+            throw new BadHttpRequestException("Вы не можете создавать получать меропрития организатора, так как не являетесь организатором", 403);
+
+        var orgEvents = await _eventRepository.GetOrganizerEvents(organizerUserId: user.Id);
+
+        return new GetAllEventsDto { Events = orgEvents.Select(MapEventToGetDto).ToList() };
     }
 
     private GetEventDto MapEventToGetDto(Event eventObject)
