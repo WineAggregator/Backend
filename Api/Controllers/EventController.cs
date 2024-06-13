@@ -14,6 +14,7 @@ public class EventController(
     UserRepository _userRepository,
     EventRepository _eventRepository,
     EventPhotoRepository _eventPhotoRepository,
+    TicketRepository _ticketRepository,
     PhotoManager _photoManager) : ControllerBase
 {
     [HttpGet]
@@ -113,6 +114,23 @@ public class EventController(
 
         return new GetAllEventsDto { Events = orgEvents.Select(MapEventToGetDto).ToList() };
     }
+
+    [HttpGet]
+    [Route("user")]
+    public async Task<GetAllEventsDto> GetEventsByUserTickets([FromHeader] UserAuthInfo authInfo)
+    {
+        var user = await _userRepository.GetEntityByIdAsync(authInfo.Id);
+        if (user is null)
+            throw new BadHttpRequestException("Нет пользователя с таким id", 401);
+
+        var userTickets = await _ticketRepository.GetAllUserTickets(authInfo.Id);
+        var events = new List<Event>();
+        foreach (var ticket in userTickets)
+            events.Add(await _eventRepository.GetEntityByIdAsync(ticket.Event.Id));
+
+        return new GetAllEventsDto { Events = events.Select(MapEventToGetDto).ToList() };
+    }
+
 
     private GetEventDto MapEventToGetDto(Event eventObject)
     {
