@@ -12,6 +12,7 @@ namespace Backend.Api.Controllers;
 public class EventController(
     UserRepository _userRepository,
     EventRepository _eventRepository,
+    EventPhotoRepository _eventPhotoRepository,
     PhotoManager _photoManager) : ControllerBase
 {
     [HttpGet]
@@ -70,11 +71,31 @@ public class EventController(
 
         foreach (var photo in photoDto.Photos)
         {
-            var photoUrl = await _photoManager.UploadPhotoAndGetUrl(photo);
+            var photoUrl = await _photoManager.UploadPhotoAndGetUrl(photo, eventId);
             urls.Add(new UrlToGetPhotoDto { Url = photoUrl });
         }
 
         return new GetUrlsForMultiplePhotos { Urls = urls };
+    }
+
+    [HttpGet]
+    [Route("{eventId}/gallery")]
+    public async Task<GetUrlsForMultiplePhotos> GetGallery([FromRoute] int eventId)
+    {
+        var photos = await _eventPhotoRepository.GetAllEventPhoto(eventId);
+
+        var urls = photos
+            .Select(eventPhoto => new UrlToGetPhotoDto { Url = _photoManager.GetUrlToPhoto((int)(eventPhoto?.Photo?.Id)) })
+            .ToList();
+
+        return new GetUrlsForMultiplePhotos { Urls = urls };
+    }
+
+    [HttpDelete]
+    [Route("{eventId}/gallery/{photoId}")]
+    public async Task DeletePhotoFromGallery([FromRoute] int eventId, [FromRoute] int photoId)
+    {
+        await _eventPhotoRepository.DeletePhotoFromGallery(eventId: eventId, photoId: photoId);
     }
 
     private GetEventDto MapEventToGetDto(Event eventObject)

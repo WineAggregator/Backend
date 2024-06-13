@@ -41,6 +41,7 @@ public static class DependencyInjectionConfiguring
         _services.AddScoped<PhotoRepository>();
         _services.AddScoped<UserRepository>();
         _services.AddScoped<TicketRepository>();
+        _services.AddScoped<EventPhotoRepository>();
     }
 
     private static void RegisterMyServices()

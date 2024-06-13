@@ -5,6 +5,8 @@ namespace Backend.Api.Services;
 
 public class PhotoManager(
     PhotoRepository _photoRepository,
+    EventRepository _eventRepository,
+    EventPhotoRepository _eventPhotoRepository,
     IHttpContextAccessor _httpContextAccessor,
     IConfiguration _config)
 {
@@ -26,6 +28,26 @@ public class PhotoManager(
 
         var photoObjectToCreate = new Photo { PhotoPath = filePath };
         var photoId = await _photoRepository.CreateEntityAsync(photoObjectToCreate);
+
+        var photoUrl = GetUrlToPhoto(photoId);
+
+        return photoUrl;
+    }
+
+    public async Task<string> UploadPhotoAndGetUrl(IFormFile file, int eventId)
+    {
+        var filePath = GeneratePath(file.FileName);
+
+        using (var fileStream = new FileStream(path: filePath, mode: FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+
+        var photoObjectToCreate = new Photo { PhotoPath = filePath };
+        var photoId = await _photoRepository.CreateEntityAsync(photoObjectToCreate);
+
+        var eventPhotoObject = new EventPhoto { Event = await _eventRepository.GetEntityByIdAsync(eventId), Photo = photoObjectToCreate };
+        await _eventPhotoRepository.CreateEntityAsync(eventPhotoObject);
 
         var photoUrl = GetUrlToPhoto(photoId);
 
