@@ -1,5 +1,7 @@
 ﻿using Backend.Database.Models;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Backend.Database.Repositories;
 
 public class EventRepository(DatabaseContext database) : BaseRepository<Event>(database)
