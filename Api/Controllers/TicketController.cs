@@ -30,6 +30,16 @@ public class TicketController(
         return new GetManyTicketsDto { Tickets = mappedTickets };
     }
 
+    [HttpGet]
+    [Route("{ticketId}")]
+    public async Task<GetTicketDto> GetTicketById([FromRoute] int ticketId)
+    {
+        var ticket = await _ticketRepository.GetEntityByIdAsync(ticketId);
+        var mappedTicket = _mapper.Map<GetTicketDto>(ticket);
+
+        return mappedTicket;
+    }
+
     [HttpPost]
     public async Task<int> CreateTicket([FromHeader] UserAuthInfo authInfo, [FromBody] CreateTicketDto ticketDto)
     {
